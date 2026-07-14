@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="FinWise.MauiApp.Views.DirectAgentRoutingPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:customvm="clr-namespace:FinWise.MauiApp.Views.CustomViews.ViewModels"
+    xmlns:sfChat="clr-namespace:Syncfusion.Maui.Chat;assembly=Syncfusion.Maui.Chat"
+    xmlns:viewmodels="clr-namespace:FinWise.MauiApp.ViewModels"
+    xmlns:views="clr-namespace:FinWise.MauiApp.Views.CustomViews.Views"
+    Title="{Binding Title}"
+    x:DataType="viewmodels:DirectAgentRoutingViewModel">
+
+    <Grid RowDefinitions="0.1*,0.1*,Auto,0.55*,0.05*" RowSpacing="0">
+
+        <!--  Agent Selection Header  -->
+        <Border
+            Grid.Row="0"
+            Padding="15,5,15,0"
+            BackgroundColor="{AppThemeBinding Light=#E3F2FD,
+                                              Dark=#1565C0}">
+            <VerticalStackLayout Spacing="10">
+                <HorizontalStackLayout Spacing="10">
+                    <Label
+                        FontAttributes="Bold"
+                        Text="Select Target Agent"
+                        TextColor="{AppThemeBinding Light=#0D47A1,
+                                                    Dark=#FFFFFF}" />
+                    <Label
+                        FontAttributes="Italic"
+                        HorizontalOptions="Center"
+                        Text="{Binding SelectedAgent, StringFormat='🎯 Routing to: {0}'}"
+                        TextColor="{AppThemeBinding Light=#1565C0,
+                                                    Dark=#BBDEFB}" />
+                </HorizontalStackLayout>
+                <HorizontalStackLayout Spacing="8">
+                    <Label
+                        FontSize="12"
+                        Text="Token mode:"
+                        TextColor="{AppThemeBinding Light=#0D47A1,
+                                                    Dark=#FFFFFF}"
+                        VerticalOptions="Center" />
+                    <Picker
+                        ItemsSource="{Binding TokenModes}"
+                        SelectedItem="{Binding SelectedTokenMode}"
+                        WidthRequest="130" />
+                </HorizontalStackLayout>
+                <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
+                    <!--  Budgeting Agent Button  -->
+                    <Button
+                        BackgroundColor="{Binding IsBudgetingSelected, Converter={StaticResource BoolToColorConverter}, ConverterParameter='Selected'}"
+                        Command="{Binding SelectBudgetingAgentCommand}"
+                        CornerRadius="22"
+                        FontAttributes="{Binding IsBudgetingSelected, Converter={StaticResource BoolToFontAttributeConverter}}"
+                        FontSize="14"
+                        Text="💰 Budgeting"
+                        TextColor="White"
+                        WidthRequest="150" />
+
+                    <!--  Loan Agent Button  -->
+                    <Button
+                        BackgroundColor="{Binding IsLoanSelected, Converter={StaticResource BoolToColorConverter}, ConverterParameter='Selected'}"
+                        Command="{Binding SelectLoanAgentCommand}"
+                        CornerRadius="22"
+                        FontAttributes="{Binding IsLoanSelected, Converter={StaticResource BoolToFontAttributeConverter}}"
+                        FontSize="14"
+                        Text="🏠 Loan"
+                        TextColor="White"
+                        WidthRequest="150" />
+                </HorizontalStackLayout>
+
+
+            </VerticalStackLayout>
+        </Border>
+
+        <!--  Token Usage Summary Panel  -->
+        <Border
+            Grid.Row="1"
+            Margin="0"
+            Padding="15,0"
+            BackgroundColor="{AppThemeBinding Light=#F5F5F5,
+                                              Dark=#2D2D2D}">
+            <Grid
+                ColumnDefinitions="*,Auto,Auto,Auto"
+                ColumnSpacing="5"
+                RowDefinitions="0.2*,0.8*"
+                RowSpacing="0">
+                <Label
+                    FontAttributes="Bold"
+                    Text="Token Usage Summary (Direct Routing)"
+                    TextColor="{AppThemeBinding Light=#333333,
+                                                Dark=#EEEEEE}" />
+                <ScrollView Grid.Row="1" Grid.Column="0">
+                    <VerticalStackLayout Grid.Column="0" Spacing="2">
+                        <Label
+                            FontSize="11"
+                            LineBreakMode="WordWrap"
+                            Text="{Binding TokenSummary}"
+                            TextColor="{AppThemeBinding Light=#666666,
+                                                        Dark=#CCCCCC}" />
+                    </VerticalStackLayout>
+                </ScrollView>
+                <VerticalStackLayout
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Spacing="5"
+                    VerticalOptions="Start">
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="12"
+                        HorizontalOptions="End"
+                        Text="{Binding RoutedAgent, StringFormat='Agent: {0}'}"
+                        TextColor="{StaticResource Primary}" />
+                    <Label
+                        FontSize="11"
+                        HorizontalOptions="End"
+                        Text="{Binding RoutingConfidence, StringFormat='Confidence: {0:P0}'}"
+                        TextColor="{AppThemeBinding Light=#666666,
+                                                    Dark=#CCCCCC}" />
+                </VerticalStackLayout>
+                <!--  More Options Button  -->
+                <Button
+                    Grid.Row="1"
+                    Grid.Column="2"
+                    Margin="4"
+                    Padding="0"
+                    BackgroundColor="Transparent"
+                    Command="{Binding ShowTelemetryForMessageCommand}"
+                    CommandParameter="{Binding LastAssistantTextMessage}"
+                    FontSize="18"
+                    HeightRequest="44"
+                    Text="📊"
+                    TextColor="{AppThemeBinding Light=#0D47A1,
+                                                Dark=#BBDEFB}"
+                    ToolTipProperties.Text="View Last Message Telemetry"
+                    WidthRequest="44" />
+                <Button
+                    Grid.Row="1"
+                    Grid.Column="3"
+                    BackgroundColor="{AppThemeBinding Light=#F0F0F0,
+                                                      Dark=#3D3D3D}"
+                    Clicked="OnMoreOptionsClicked"
+                    CornerRadius="20"
+                    FontSize="24"
+                    HeightRequest="44"
+                    Text="⋮"
+                    TextColor="{AppThemeBinding Light=Black,
+                                                Dark=White}"
+                    WidthRequest="44" />
+            </Grid>
+        </Border>
+        <!--  Telemetry Info Card (Collapsible)  -->
+        <Border
+            Grid.Row="2"
+            Margin="0"
+            Padding="15,5"
+            BackgroundColor="{AppThemeBinding Light=#F0F8FF,
+                                              Dark=#0D1B2A}"
+            Stroke="{AppThemeBinding Light=#1E90FF,
+                                     Dark=#4A90E2}"
+            StrokeThickness="1">
+            <VerticalStackLayout Spacing="6">
+                <Grid ColumnDefinitions="Auto,*,Auto">
+                    <Label
+                        Grid.Column="0"
+                        FontAttributes="Bold"
+                        FontSize="12"
+                        Text="ℹ️ Token Telemetry Explained"
+                        TextColor="{AppThemeBinding Light=#0D3D9E,
+                                                    Dark=#87CEEB}" />
+                    <Button
+                        x:Name="telemetryInfoToggle"
+                        Grid.Column="2"
+                        Margin="0"
+                        Padding="2,0"
+                        BackgroundColor="Transparent"
+                        Clicked="OnTelemetryInfoToggle"
+                        FontSize="14"
+                        HeightRequest="32"
+                        Text="▼"
+                        TextColor="{AppThemeBinding Light=#0D3D9E,
+                                                    Dark=#87CEEB}"
+                        WidthRequest="32" />
+                </Grid>
+                <!--  Info Content (Collapsible)  -->
+                <VerticalStackLayout x:Name="telemetryInfoContent" Spacing="6">
+                    <Label
+                        FontSize="10"
+                        LineBreakMode="WordWrap"
+                        Text="Token telemetry shows how many 'tokens' (text chunks) your request used across the AI processing pipeline."
+                        TextColor="{AppThemeBinding Light=#333333,
+                                                    Dark=#DDDDDD}" />
+                    <BoxView HeightRequest="1" Color="{AppThemeBinding Light=#E0E0E0, Dark=#444444}" />
+                    <!--  Three Types Explanation  -->
+                    <VerticalStackLayout Spacing="4">
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="10"
+                            Text="Three Types of Token Counts:"
+                            TextColor="{AppThemeBinding Light=#0D3D9E,
+                                                        Dark=#87CEEB}" />
+                        <VerticalStackLayout Margin="8,0,0,0" Spacing="3">
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="9"
+                                Text="✓ EXACT"
+                                TextColor="{AppThemeBinding Light=#1B5E20,
+                                                            Dark=#66BB6A}" />
+                            <Label
+                                FontSize="9"
+                                LineBreakMode="WordWrap"
+                                Text="From the AI provider (e.g., Azure OpenAI). Highest accuracy. Not always available."
+                                TextColor="{AppThemeBinding Light=#333333,
+                                                            Dark=#CCCCCC}" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Margin="8,0,0,0" Spacing="3">
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="9"
+                                Text="📊 ESTIMATED"
+                                TextColor="{AppThemeBinding Light=#F57F17,
+                                                            Dark=#FFC107}" />
+                            <Label
+                                FontSize="9"
+                                LineBreakMode="WordWrap"
+                                Text="Calculated locally using: text length ÷ 4. Always available but less accurate (~±20%)."
+                                TextColor="{AppThemeBinding Light=#333333,
+                                                            Dark=#CCCCCC}" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Margin="8,0,0,0" Spacing="3">
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="9"
+                                Text="🎯 MEASURED"
+                                TextColor="{AppThemeBinding Light=#0D3D9E,
+                                                            Dark=#87CEEB}" />
+                            <Label
+                                FontSize="9"
+                                LineBreakMode="WordWrap"
+                                Text="Smart choice: uses EXACT if available, falls back to ESTIMATED if needed. Best of both worlds."
+                                TextColor="{AppThemeBinding Light=#333333,
+                                                            Dark=#CCCCCC}" />
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                    <BoxView HeightRequest="1" Color="{AppThemeBinding Light=#E0E0E0, Dark=#444444}" />
+                    <!--  Where Tokens Come From  -->
+                    <VerticalStackLayout Spacing="3">
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="10"
+                            Text="Three Tiers:"
+                            TextColor="{AppThemeBinding Light=#0D3D9E,
+                                                        Dark=#87CEEB}" />
+                        <VerticalStackLayout Margin="8,0,0,0" Spacing="2">
+                            <Label
+                                FontSize="9"
+                                LineBreakMode="WordWrap"
+                                Text="🔹 SUPERVISOR: Tokens used by the router agent"
+                                TextColor="{AppThemeBinding Light=#333333,
+                                                            Dark=#CCCCCC}" />
+                            <Label
+                                FontSize="9"
+                                LineBreakMode="WordWrap"
+                                Text="🔹 DOWNSTREAM: Tokens used by specialist agents"
+                                TextColor="{AppThemeBinding Light=#333333,
+                                                            Dark=#CCCCCC}" />
+                            <Label
+                                FontSize="9"
+                                LineBreakMode="WordWrap"
+                                Text="🔹 TOTAL: Sum of supervisor + downstream"
+                                TextColor="{AppThemeBinding Light=#333333,
+                                                            Dark=#CCCCCC}" />
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                    <BoxView HeightRequest="1" Color="{AppThemeBinding Light=#E0E0E0, Dark=#444444}" />
+                    <!--  Why It Matters  -->
+                    <VerticalStackLayout Spacing="3">
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="10"
+                            Text="Why It Matters:"
+                            TextColor="{AppThemeBinding Light=#0D3D9E,
+                                                        Dark=#87CEEB}" />
+                        <VerticalStackLayout Margin="8,0,0,0" Spacing="2">
+                            <Label
+                                FontSize="9"
+                                LineBreakMode="WordWrap"
+                                Text="💰 Tokens = Cost: More tokens = higher API costs"
+                                TextColor="{AppThemeBinding Light=#333333,
+                                                            Dark=#CCCCCC}" />
+                            <Label
+                                FontSize="9"
+                                LineBreakMode="WordWrap"
+                                Text="🎯 Accuracy: EXACT (✓) is more trustworthy than ESTIMATED (⚠️)"
+                                TextColor="{AppThemeBinding Light=#333333,
+                                                            Dark=#CCCCCC}" />
+                            <Label
+                                FontSize="9"
+                                LineBreakMode="WordWrap"
+                                Text="🔍 Debugging: Identify which agent used the most tokens"
+                                TextColor="{AppThemeBinding Light=#333333,
+                                                            Dark=#CCCCCC}" />
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                    <Label
+                        FontAttributes="Italic"
+                        FontSize="8"
+                        LineBreakMode="WordWrap"
+                        Text="💡 Tip: Tap the 📊 button in the summary bar to see detailed token breakdown in a bottom sheet."
+                        TextColor="{AppThemeBinding Light=#666666,
+                                                    Dark=#999999}" />
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </Border>
+
+        <!--  Syncfusion Chat Control  -->
+        <sfChat:SfChat
+            x:Name="DirectRoutingChat"
+            Grid.Row="3"
+            CurrentUser="{Binding CurrentUser}"
+            MessageDoubleTapped="DirectRoutingChat_MessageDoubleTapped"
+            Messages="{Binding ChatMessages, Mode=OneWay}"
+            SendMessageCommand="{Binding SendDirectMessageCommand}"
+            ShowDeliveryState="True"
+            ShowIncomingMessageAvatar="True"
+            ShowOutgoingMessageAvatar="True"
+            ShowTypingIndicator="{Binding IsProcessing}"
+            SuggestionItemSelected="ChatControl_SuggestionItemSelected"
+            Suggestions="{Binding ChatSuggestions}" />
+
+        <!--  Info Panel  -->
+        <Border
+            Grid.Row="4"
+            Padding="12,8"
+            BackgroundColor="{AppThemeBinding Light=#FFF9C4,
+                                              Dark=#F57F17}">
+            <Label
+                FontSize="8"
+                LineBreakMode="WordWrap"
+                Text="ℹ️ Direct Routing: Messages are sent directly to your selected agent, bypassing automatic AI routing. Use this when you know exactly which agent you need."
+                TextColor="{AppThemeBinding Light=#F57F17,
+                                            Dark=#FFF9C4}" />
+        </Border>
+
+        <!--  Loading Overlay  -->
+        <Grid
+            Grid.Row="0"
+            Grid.RowSpan="5"
+            BackgroundColor="#80000000"
+            IsVisible="{Binding IsProcessing}">
+            <ActivityIndicator
+                HeightRequest="50"
+                IsRunning="{Binding IsProcessing}"
+                WidthRequest="50"
+                Color="{StaticResource Primary}" />
+        </Grid>
+        <views:TelemetryDetailsPage
+            x:Name="telemetryDetailsSheet"
+            Grid.Row="1"
+            Grid.RowSpan="5"
+            x:DataType="customvm:TelemetryDetailsViewModel"
+            ContentPadding="15"
+            CornerRadius="25, 25, 0,0"
+            IsModal="True" />
+    </Grid>
+
+</ContentPage>

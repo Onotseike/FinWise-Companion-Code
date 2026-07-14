@@ -1,0 +1,202 @@
+name: FinWise CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, develop, "feature/**", "release/**"]
+  pull_request:
+    branches: [main, develop]
+
+# Add these permissions
+permissions:
+  contents: read
+  actions: read
+  checks: write
+  pull-requests: write
+  statuses: write
+  security-events: write
+
+env:
+  DOTNET_VERSION_PREVIOUS: "9.0.x"
+  DOTNET_VERSION: "10.0.100"
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: "./Agents"
+  MAUI_APP_PATH: "./Apps"
+
+jobs:
+  # Job 1: Build and Test Shared Components
+  test-shared:
+    runs-on: ubuntu-latest
+    name: Test Shared Components
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore dependencies
+        run: dotnet restore ./Shared
+
+      - name: Build Shared
+        run: dotnet build ./Shared --no-restore --configuration Release
+
+      - name: Run Shared Tests
+        run: dotnet test --project ./Tests/FinWise.Shared.Tests --configuration Release --results-directory ./TestResults/Shared --report-trx
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: shared-test-results
+          path: ./TestResults/Shared
+
+  # Job 2: Build and Test Azure Functions (Agents)
+  test-agents:
+    runs-on: ubuntu-latest
+    name: Test Azure Functions
+    needs: test-shared
+
+    strategy:
+      matrix:
+        agent: [BudgetingAgent, LoanAgent, SupervisorAgent]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore dependencies
+        run: dotnet restore ./Agents/${{ matrix.agent }}
+
+      - name: Build Agent
+        run: dotnet build ./Agents/${{ matrix.agent }} --no-restore --configuration Release
+
+      - name: Restore test dependencies
+        if: matrix.agent != 'SupervisorAgent'
+        run: dotnet restore ./Tests/FinWise.${{ matrix.agent }}.Tests
+
+      - name: Run Agent Tests
+        if: matrix.agent != 'SupervisorAgent'
+        run: dotnet test --project ./Tests/FinWise.${{ matrix.agent }}.Tests --configuration Release --results-directory ./TestResults/Agents/${{ matrix.agent }} --report-trx
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always() && matrix.agent != 'SupervisorAgent'
+        with:
+          name: agent-test-results-${{ matrix.agent }}
+          path: ./TestResults/Agents/${{ matrix.agent }}
+
+      - name: Function App Settings Check
+        run: |
+          if [ -f "./Agents/${{ matrix.agent }}/local.settings.json" ]; then
+            echo "Found local.settings.json for ${{ matrix.agent }}"
+          fi
+
+  # Job 3: Build MAUI App (Multiple Platforms)
+  test-maui:
+    runs-on: ${{ matrix.os }}
+    name: Test MAUI App
+    needs: test-shared
+
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            target: windows
+            framework: net10.0-windows10.0.19041.0
+          - os: windows-latest
+            target: android
+            framework: net10.0-android36.0
+          - os: macos-26
+            target: ios
+            framework: net10.0-ios
+            xcode-version: "26.5"
+          - os: macos-26
+            target: maccatalyst
+            framework: net10.0-maccatalyst
+            xcode-version: "26.5"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install .NET SDKs
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            ${{ env.DOTNET_VERSION_PREVIOUS}}
+            ${{ env.DOTNET_VERSION }}
+
+      - name: Install .NET MAUI Workload
+        run: dotnet workload install maui
+
+      - name: Setup Xcode
+        if: startsWith(matrix.os, 'macos-')
+        run: sudo xcode-select -s /Applications/Xcode_${{ matrix.xcode-version }}.app
+
+      - name: Build MAUI App
+        shell: bash
+        run: |
+          if [ "${{ matrix.target }}" == "ios" ]; then
+            dotnet build ./Apps/FinWise.MauiApp --configuration Release --framework ${{ matrix.framework }} \
+              -p:RuntimeIdentifier=iossimulator-arm64 \
+              -p:ArchiveOnBuild=false \
+              -p:BuildIpa=false \
+              -p:EnableCodeSigning=false \
+              -p:CodesignKey="" \
+              -p:CodesignProvision="" \
+              --verbosity normal
+          elif [ "${{ matrix.target }}" == "android" ]; then
+            dotnet build ./Apps/FinWise.MauiApp --configuration Release --framework ${{ matrix.framework }} \
+              -p:AndroidSdkDirectory="$ANDROID_SDK_ROOT" \
+              --verbosity normal
+          elif [ "${{ matrix.target }}" == "maccatalyst" ]; then
+            dotnet build ./Apps/FinWise.MauiApp --configuration Release --framework ${{ matrix.framework }} \
+              -p:EnableCodeSigning=false \
+              --verbosity normal
+          else
+            dotnet build ./Apps/FinWise.MauiApp --configuration Release --framework ${{ matrix.framework }} \
+              --verbosity normal
+          fi
+
+      - name: Run MAUI Tests
+        run: dotnet test --project ./Tests/FinWise.MauiApp.Tests --configuration Release
+  
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: csharp
+          config: |
+            paths:
+              - ./Agents
+              - ./Shared
+
+      - name: Build backend projects only
+        run: |
+          dotnet restore ./Agents
+          dotnet build ./Agents --no-restore
+          dotnet restore ./Shared
+          dotnet build ./Shared --no-restore
+
+      - name: Perform CodeQL Analysis (no upload)
+        uses: github/codeql-action/analyze@v3
+        with:
+          upload: false
+          output: ./security-results
+
+      - name: Upload results as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: codeql-security-results
+          path: ./security-results
+ 

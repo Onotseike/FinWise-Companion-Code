@@ -1,0 +1,1 @@
+﻿namespace FinWise.Shared.Data;

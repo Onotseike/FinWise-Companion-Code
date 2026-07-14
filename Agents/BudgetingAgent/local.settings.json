@@ -1,0 +1,21 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "AzureWebJobsSecretStorageType": "Files",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+    "TOSHL_API_TOKEN": "<toshl-api-token>",
+    "TOSHL_API_BASE_URL": "https://<toshl-api-host>",
+    "MANAGEMENT_ENDPOINT": "https://<azure-management-endpoint>",
+    "AGENT_ID": "BudgetingAgent_001",
+    "HEARTBEAT_FREQUENCY": "00:05:00",
+    "AzureOpenAIKey": "<azure-openai-api-key>",
+    "AzureOpenAIEndpoint": "https://<azure-openai-resource>.openai.azure.com/",
+    "AzureOpenAIChatDeploymentName": "<azure-openai-chat-deployment-name>",
+    "AzureOpenAIDeploymentName": "<azure-openai-deployment-name>",
+    "TokenMeasurementMode": "hybrid",
+    "ServiceBus:Connection": "Endpoint=sb://<service-bus-namespace>.servicebus.windows.net/;SharedAccessKeyName=<shared-access-key-name>;SharedAccessKey=<shared-access-key>",
+    "ServiceBus:Topic": "<service-bus-topic-name>",
+    "ServiceBus:Subscriptions:Financial": "<financial-subscription-name>"
+  }
+}

@@ -1,0 +1,293 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="FinWise.MauiApp.Views.MainPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:FinWise.MauiApp.ViewModels"
+    Title="FinWise - Financial Intelligence"
+    x:DataType="vm:MainViewModel">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="16">
+
+            <!--  Header  -->
+            <Label
+                FontAttributes="Bold"
+                FontSize="36"
+                HorizontalOptions="Center"
+                Text="🏦 FinWise"
+                TextColor="{StaticResource Primary}" />
+
+            <Label
+                FontSize="16"
+                HorizontalOptions="Center"
+                Text="AI-Powered Financial Assistant"
+                TextColor="{AppThemeBinding Light=#666666,
+                                            Dark=#AAAAAA}" />
+
+            <!--  Quick Status Card  -->
+            <Border
+                Padding="16"
+                BackgroundColor="{AppThemeBinding Light=#E8F5E9,
+                                                  Dark=#1B5E20}"
+                StrokeShape="RoundRectangle 12">
+                <VerticalStackLayout Spacing="10">
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="18"
+                        Text="✨ Multi-Agent System Ready" />
+                    <Label
+                        FontSize="13"
+                        LineBreakMode="WordWrap"
+                        Text="Your AI assistant is powered by intelligent specialist agents working together. Ask financial questions and watch the system route your request to the right expert." />
+                </VerticalStackLayout>
+            </Border>
+
+            <!--  Quick Actions  -->
+            <Label
+                FontAttributes="Bold"
+                FontSize="18"
+                Text="⚡ Quick Actions" />
+            <Grid
+                ColumnDefinitions="*,*"
+                ColumnSpacing="12"
+                RowSpacing="12">
+
+                <!--  Chat with AI  -->
+                <Border
+                    Grid.Column="0"
+                    Padding="16"
+                    BackgroundColor="{AppThemeBinding Light=#E3F2FD,
+                                                      Dark=#0D47A1}"
+                    StrokeShape="RoundRectangle 10">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout Spacing="8">
+                        <Label
+                            FontSize="28"
+                            HorizontalOptions="Center"
+                            Text="💬" />
+                        <Label
+                            FontAttributes="Bold"
+                            HorizontalOptions="Center"
+                            Text="Chat with AI" />
+                        <Label
+                            FontSize="12"
+                            HorizontalOptions="Center"
+                            LineBreakMode="WordWrap"
+                            Text="Ask your financial questions with automatic routing" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <!--  Direct Routing  -->
+                <Border
+                    Grid.Column="1"
+                    Padding="16"
+                    BackgroundColor="{AppThemeBinding Light=#F3E5F5,
+                                                      Dark=#4A148C}"
+                    StrokeShape="RoundRectangle 10">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_1" />
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout Spacing="8">
+                        <Label
+                            FontSize="28"
+                            HorizontalOptions="Center"
+                            Text="🎯" />
+                        <Label
+                            FontAttributes="Bold"
+                            HorizontalOptions="Center"
+                            Text="Direct Routing" />
+                        <Label
+                            FontSize="12"
+                            HorizontalOptions="Center"
+                            LineBreakMode="WordWrap"
+                            Text="Choose a specific agent directly" />
+                    </VerticalStackLayout>
+                </Border>
+
+            </Grid>
+
+            <!--  How It Works  -->
+            <Label
+                FontAttributes="Bold"
+                FontSize="18"
+                Text="🔄 How It Works" />
+            <Border Padding="16" StrokeShape="RoundRectangle 10">
+                <VerticalStackLayout Spacing="12">
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                        <Label
+                            Grid.Column="0"
+                            FontSize="20"
+                            Text="1️⃣" />
+                        <VerticalStackLayout Grid.Column="1" Spacing="2">
+                            <Label FontAttributes="Bold" Text="You Ask a Question" />
+                            <Label
+                                FontSize="12"
+                                LineBreakMode="WordWrap"
+                                Text="Send a message through the chat interface or use direct routing."
+                                TextColor="{AppThemeBinding Light=#666666,
+                                                            Dark=#AAAAAA}" />
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                        <Label
+                            Grid.Column="0"
+                            FontSize="20"
+                            Text="2️⃣" />
+                        <VerticalStackLayout Grid.Column="1" Spacing="2">
+                            <Label FontAttributes="Bold" Text="Supervisor Routes Request" />
+                            <Label
+                                FontSize="12"
+                                LineBreakMode="WordWrap"
+                                Text="The supervisor analyzes your intent and picks the best agent for the job."
+                                TextColor="{AppThemeBinding Light=#666666,
+                                                            Dark=#AAAAAA}" />
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                        <Label
+                            Grid.Column="0"
+                            FontSize="20"
+                            Text="3️⃣" />
+                        <VerticalStackLayout Grid.Column="1" Spacing="2">
+                            <Label FontAttributes="Bold" Text="Specialist Agent Works" />
+                            <Label
+                                FontSize="12"
+                                LineBreakMode="WordWrap"
+                                Text="The chosen agent (Budgeting, Loan, etc.) uses AI and tools to process your request."
+                                TextColor="{AppThemeBinding Light=#666666,
+                                                            Dark=#AAAAAA}" />
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                        <Label
+                            Grid.Column="0"
+                            FontSize="20"
+                            Text="4️⃣" />
+                        <VerticalStackLayout Grid.Column="1" Spacing="2">
+                            <Label FontAttributes="Bold" Text="Get Results + Metrics" />
+                            <Label
+                                FontSize="12"
+                                LineBreakMode="WordWrap"
+                                Text="See your answer plus detailed telemetry about how many tokens were used and which agents participated."
+                                TextColor="{AppThemeBinding Light=#666666,
+                                                            Dark=#AAAAAA}" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <!--  Available Agents  -->
+            <Label
+                FontAttributes="Bold"
+                FontSize="18"
+                Text="🤖 Meet the Agents" />
+            <Border
+                Padding="16"
+                BackgroundColor="{AppThemeBinding Light=#FFF3E0,
+                                                  Dark=#E65100}"
+                StrokeShape="RoundRectangle 10">
+                <VerticalStackLayout Spacing="10">
+                    <Label FontAttributes="Bold" Text="💰 Budgeting Agent" />
+                    <Label
+                        FontSize="12"
+                        LineBreakMode="WordWrap"
+                        Text="Helps create budgets, analyze spending, track financial goals, and optimize your expenses." />
+                </VerticalStackLayout>
+            </Border>
+
+            <Border
+                Padding="16"
+                BackgroundColor="{AppThemeBinding Light=#FCE4EC,
+                                                  Dark=#880E4F}"
+                StrokeShape="RoundRectangle 10">
+                <VerticalStackLayout Spacing="10">
+                    <Label FontAttributes="Bold" Text="🏠 Loan Agent" />
+                    <Label
+                        FontSize="12"
+                        LineBreakMode="WordWrap"
+                        Text="Provides information on loans, interest rates, repayment plans, and loan optimization strategies." />
+                </VerticalStackLayout>
+            </Border>
+
+            <!--  Key Features  -->
+            <Label
+                FontAttributes="Bold"
+                FontSize="18"
+                Text="⭐ Key Features" />
+            <VerticalStackLayout Spacing="10">
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                    <Label
+                        Grid.Column="0"
+                        FontSize="16"
+                        Text="✅" />
+                    <Label
+                        Grid.Column="1"
+                        FontSize="13"
+                        LineBreakMode="WordWrap"
+                        Text="Real-time token usage tracking and cost estimation" />
+                </Grid>
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                    <Label
+                        Grid.Column="0"
+                        FontSize="16"
+                        Text="✅" />
+                    <Label
+                        Grid.Column="1"
+                        FontSize="13"
+                        LineBreakMode="WordWrap"
+                        Text="Intelligent agent routing based on request analysis" />
+                </Grid>
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                    <Label
+                        Grid.Column="0"
+                        FontSize="16"
+                        Text="✅" />
+                    <Label
+                        Grid.Column="1"
+                        FontSize="13"
+                        LineBreakMode="WordWrap"
+                        Text="Detailed telemetry showing agent hops and function calls" />
+                </Grid>
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                    <Label
+                        Grid.Column="0"
+                        FontSize="16"
+                        Text="✅" />
+                    <Label
+                        Grid.Column="1"
+                        FontSize="13"
+                        LineBreakMode="WordWrap"
+                        Text="Direct routing option to bypass AI-based routing" />
+                </Grid>
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                    <Label
+                        Grid.Column="0"
+                        FontSize="16"
+                        Text="✅" />
+                    <Label
+                        Grid.Column="1"
+                        FontSize="13"
+                        LineBreakMode="WordWrap"
+                        Text="Multi-turn conversation support with history" />
+                </Grid>
+            </VerticalStackLayout>
+
+            <!--  Footer  -->
+            <Label
+                FontSize="12"
+                HorizontalOptions="Center"
+                HorizontalTextAlignment="Center"
+                Text="Built with .NET MAUI, Azure OpenAI, and Microsoft.Agents.AI"
+                TextColor="{AppThemeBinding Light=#999999,
+                                            Dark=#666666}" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

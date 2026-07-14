@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="FinWise.MauiApp.Views.CustomViews.Views.TelemetryDetailView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    <ScrollView>
+        <StackLayout Padding="12" Spacing="8">
+            <Label
+                FontAttributes="Bold"
+                FontSize="12"
+                Text="Agent Hops:"
+                TextColor="{StaticResource Primary}" />
+            <Label
+                FontSize="10"
+                LineBreakMode="WordWrap"
+                Text="{Binding VisibleAgentHops}" />
+            <Label
+                FontAttributes="Bold"
+                FontSize="12"
+                Text="Functions:"
+                TextColor="{StaticResource Primary}" />
+            <Label
+                FontSize="10"
+                LineBreakMode="WordWrap"
+                Text="{Binding VisibleFunctionsCalled}" />
+            <Label
+                FontAttributes="Bold"
+                FontSize="12"
+                Text="Tools:"
+                TextColor="{StaticResource Primary}" />
+            <Label
+                FontSize="10"
+                LineBreakMode="WordWrap"
+                Text="{Binding VisibleToolsCalled}" />
+        </StackLayout>
+    </ScrollView>
+</ContentView>

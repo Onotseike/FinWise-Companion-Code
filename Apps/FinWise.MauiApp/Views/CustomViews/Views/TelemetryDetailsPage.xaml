@@ -1,0 +1,621 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<bottomSheet:SfBottomSheet
+    x:Class="FinWise.MauiApp.Views.CustomViews.Views.TelemetryDetailsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/maui/global"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:bottomSheet="clr-namespace:Syncfusion.Maui.Toolkit.BottomSheet;assembly=Syncfusion.Maui.Toolkit"
+    xmlns:d="http://schemas.microsoft.com/dotnet/maui/global/design"
+    xmlns:local="clr-namespace:FinWise.MauiApp.Views.CustomViews.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:FinWise.MauiApp.Views.CustomViews.ViewModels"
+    x:DataType="vm:TelemetryDetailsViewModel"
+    AllowedState="FullExpanded"
+    ContentPadding="5"
+    CornerRadius="25, 25, 0,0"
+    HalfExpandedRatio="0.9"
+    IsModal="True"
+    mc:Ignorable="d">
+    <bottomSheet:SfBottomSheet.BottomSheetContent>
+        <Grid RowDefinitions="Auto,*" RowSpacing="0">
+            <!--  Header  -->
+            <Border
+                Grid.Row="0"
+                Padding="15,12"
+                BackgroundColor="{AppThemeBinding Light=#1976D2,
+                                                  Dark=#0D47A1}"
+                HeightRequest="100">
+                <Grid ColumnDefinitions="*,Auto">
+                    <VerticalStackLayout Grid.Column="0" Spacing="4">
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="18"
+                            Text="📊 Message Telemetry Details"
+                            TextColor="White" />
+                        <Label
+                            FontAttributes="Italic"
+                            FontSize="12"
+                            Text="{Binding MessageTimestamp, StringFormat='Timestamp: {0:yyyy-MM-dd HH:mm:ss}'}"
+                            TextColor="#BBDEFB" />
+                    </VerticalStackLayout>
+                    <!--  Close Button  -->
+                    <Button
+                        Grid.Column="1"
+                        Margin="0"
+                        Padding="0"
+                        BackgroundColor="Transparent"
+                        Clicked="Button_Clicked"
+                        FontSize="24"
+                        HeightRequest="44"
+                        Text="✕"
+                        TextColor="White"
+                        WidthRequest="44" />
+                </Grid>
+            </Border>
+            <!--  Scrollable Content  -->
+            <ScrollView Grid.Row="1">
+                <StackLayout Padding="12" Spacing="12">
+                    <!--  Selected Agent Card  -->
+
+                    <Border
+                        Padding="12"
+                        BackgroundColor="{AppThemeBinding Light=#E3F2FD,
+                                                          Dark=#1565C0}"
+                        Stroke="{AppThemeBinding Light=#1976D2,
+                                                 Dark=#42A5F5}"
+                        StrokeThickness="1">
+                        <VerticalStackLayout Spacing="4">
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="14"
+                                Text="🎯 Agent Information"
+                                TextColor="{AppThemeBinding Light=#0D47A1,
+                                                            Dark=#E3F2FD}" />
+                            <Label
+                                FontSize="12"
+                                Text="{Binding SelectedAgent, StringFormat='Selected Agent: {0}'}"
+                                TextColor="{AppThemeBinding Light=#333333,
+                                                            Dark=#CCCCCC}" />
+                            <Label
+                                FontAttributes="Italic"
+                                FontSize="10"
+                                LineBreakMode="WordWrap"
+                                Text="{Binding ConversationId, StringFormat='Conversation ID: {0}'}"
+                                TextColor="{AppThemeBinding Light=#666666,
+                                                            Dark=#999999}" />
+                            <VerticalStackLayout Spacing="4">
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="14"
+                                    Text="🔍 Trace ID"
+                                    TextColor="{AppThemeBinding Light=#333333,
+                                                                Dark=#EEEEEE}" />
+                                <Label
+                                    FontAttributes="Italic"
+                                    FontSize="9"
+                                    LineBreakMode="WordWrap"
+                                    Text="{Binding TraceIdDetail}"
+                                    TextColor="{AppThemeBinding Light=#666666,
+                                                                Dark=#CCCCCC}" />
+                            </VerticalStackLayout>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!--  Message Content Card  -->
+
+                    <Border
+                        Padding="12"
+                        BackgroundColor="{AppThemeBinding Light=#F5F5F5,
+                                                          Dark=#2D2D2D}"
+                        Stroke="{AppThemeBinding Light=#CCCCCC,
+                                                 Dark=#444444}"
+                        StrokeThickness="1">
+                        <VerticalStackLayout Spacing="4">
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="14"
+                                Text="💬 Message Content"
+                                TextColor="{AppThemeBinding Light=#333333,
+                                                            Dark=#EEEEEE}" />
+                            <Label
+                                FontSize="11"
+                                LineBreakMode="WordWrap"
+                                Text="{Binding MessageContent}"
+                                TextColor="{AppThemeBinding Light=#555555,
+                                                            Dark=#DDDDDD}" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!--  Routing Details Card  -->
+
+                    <Border
+                        Padding="12"
+                        BackgroundColor="{AppThemeBinding Light=#F3E5F5,
+                                                          Dark=#4A148C}"
+                        Stroke="{AppThemeBinding Light=#9C27B0,
+                                                 Dark=#CE93D8}"
+                        StrokeThickness="1">
+                        <VerticalStackLayout Spacing="4">
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="14"
+                                Text="🔀 Routing Details"
+                                TextColor="{AppThemeBinding Light=#4A148C,
+                                                            Dark=#F3E5F5}" />
+                            <Label
+                                FontSize="10"
+                                LineBreakMode="WordWrap"
+                                Text="{Binding RoutingDetail}"
+                                TextColor="{AppThemeBinding Light=#333333,
+                                                            Dark=#CCCCCC}" />
+                        </VerticalStackLayout>
+                    </Border>
+                    <!--  Token Usage Card (Enhanced with Grid Layout)  -->
+
+                    <Border
+                        Padding="12"
+                        BackgroundColor="{AppThemeBinding Light=#E8F5E9,
+                                                          Dark=#1B5E20}"
+                        Stroke="{AppThemeBinding Light=#4CAF50,
+                                                 Dark=#66BB6A}"
+                        StrokeThickness="1">
+                        <VerticalStackLayout Spacing="8">
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="14"
+                                Text="🪙 Token Usage"
+                                TextColor="{AppThemeBinding Light=#1B5E20,
+                                                            Dark=#E8F5E9}" />
+
+                            <!--  Measurement Mode Display  -->
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="11"
+                                Text="{Binding MeasurementModeDisplay}"
+                                TextColor="{AppThemeBinding Light=#2E7D32,
+                                                            Dark=#A5D6A7}" />
+
+                            <!--  Warning Message (shown if exact not available)  -->
+                            <Label
+                                FontSize="10"
+                                IsVisible="{Binding TokenWarningMessage, Converter={StaticResource InvertedBoolConverter}}"
+                                LineBreakMode="WordWrap"
+                                Text="{Binding TokenWarningMessage}"
+                                TextColor="{AppThemeBinding Light=#F57F17,
+                                                            Dark=#FFC107}" />
+
+                            <BoxView
+                                HeightRequest="1"
+                                Opacity="0.3"
+                                Color="{AppThemeBinding Light=#4CAF50,
+                                                        Dark=#66BB6A}" />
+
+                            <!--  Supervisor Token Table  -->
+                            <VerticalStackLayout Spacing="4">
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="10"
+                                    Text="📊 Supervisor Token Usage"
+                                    TextColor="{AppThemeBinding Light=#1B5E20,
+                                                                Dark=#E8F5E9}" />
+                                <Grid ColumnDefinitions="*,*,*" RowDefinitions="Auto,*">
+                                    <Label
+                                        Grid.ColumnSpan="3"
+                                        FontFamily="Courier"
+                                        FontSize="8"
+                                        Text="{Binding SupervisorTokenTable.MeasuredSource, StringFormat='Measurement Source Mode: {0}'}"
+                                        TextColor="{AppThemeBinding Light=#333333,
+                                                                    Dark=#CCCCCC}" />
+                                    <!--  Exact token usage computation  -->
+                                    <VerticalStackLayout Grid.Row="1">
+                                        <Label
+                                            FontFamily="Courier"
+                                            FontSize="8"
+                                            Text="{Binding SupervisorTokenTable.ExactInputTokens, StringFormat='Exact Input: {0:N0}'}"
+                                            TextColor="{AppThemeBinding Light=#333333,
+                                                                        Dark=#CCCCCC}" />
+                                        <Label
+                                            FontFamily="Courier"
+                                            FontSize="8"
+                                            Text="{Binding SupervisorTokenTable.ExactOutputTokens, StringFormat='Exact Output: {0:N0}'}"
+                                            TextColor="{AppThemeBinding Light=#333333,
+                                                                        Dark=#CCCCCC}" />
+                                        <Label
+                                            FontFamily="Courier"
+                                            FontSize="8"
+                                            Text="{Binding SupervisorTokenTable.ExactTotalTokens, StringFormat='Exact Total: {0:N0}'}"
+                                            TextColor="{AppThemeBinding Light=#333333,
+                                                                        Dark=#CCCCCC}" />
+                                    </VerticalStackLayout>
+                                    <!--  Estimated tokens usage computation  -->
+                                    <VerticalStackLayout Grid.Row="1" Grid.Column="1">
+                                        <Label
+                                            FontFamily="Courier"
+                                            FontSize="8"
+                                            Text="{Binding SupervisorTokenTable.EstimatedInputTokens, StringFormat='Estimated Input: {0:N0}'}"
+                                            TextColor="{AppThemeBinding Light=#333333,
+                                                                        Dark=#CCCCCC}" />
+                                        <Label
+                                            FontFamily="Courier"
+                                            FontSize="8"
+                                            Text="{Binding SupervisorTokenTable.EstimatedOutputTokens, StringFormat='Estimated Output: {0:N0}'}"
+                                            TextColor="{AppThemeBinding Light=#333333,
+                                                                        Dark=#CCCCCC}" />
+                                        <Label
+                                            FontFamily="Courier"
+                                            FontSize="8"
+                                            Text="{Binding SupervisorTokenTable.EstimatedTotalTokens, StringFormat='Estimated Total: {0:N0}'}"
+                                            TextColor="{AppThemeBinding Light=#333333,
+                                                                        Dark=#CCCCCC}" />
+                                    </VerticalStackLayout>
+                                    <!--  Measured tokens usage computation  -->
+                                    <VerticalStackLayout Grid.Row="1" Grid.Column="2">
+                                        <Label
+                                            FontFamily="Courier"
+                                            FontSize="8"
+                                            Text="{Binding SupervisorTokenTable.MeasuredInputTokens, StringFormat='Measured Input: {0:N0}'}"
+                                            TextColor="{AppThemeBinding Light=#333333,
+                                                                        Dark=#CCCCCC}" />
+                                        <Label
+                                            FontFamily="Courier"
+                                            FontSize="8"
+                                            Text="{Binding SupervisorTokenTable.MeasuredOutputTokens, StringFormat='Measured Output: {0:N0}'}"
+                                            TextColor="{AppThemeBinding Light=#333333,
+                                                                        Dark=#CCCCCC}" />
+                                        <Label
+                                            FontFamily="Courier"
+                                            FontSize="8"
+                                            Text="{Binding SupervisorTokenTable.MeasuredTotalTokens, StringFormat='Measured Total: {0:N0}'}"
+                                            TextColor="{AppThemeBinding Light=#333333,
+                                                                        Dark=#CCCCCC}" />
+                                    </VerticalStackLayout>
+                                </Grid>
+                            </VerticalStackLayout>
+                            <BoxView
+                                HeightRequest="1"
+                                Opacity="0.3"
+                                Color="{AppThemeBinding Light=#4CAF50,
+                                                        Dark=#66BB6A}" />
+
+                            <!--  Downstream Token Table  -->
+                            <VerticalStackLayout Spacing="4">
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="10"
+                                    Text="📊 Specialist Agents Token Usage (DownStream)"
+                                    TextColor="{AppThemeBinding Light=#1B5E20,
+                                                                Dark=#E8F5E9}" />
+                                <Grid ColumnDefinitions="*,*,*" RowDefinitions="Auto,*">
+                                    <Label
+                                        Grid.ColumnSpan="3"
+                                        FontFamily="Courier"
+                                        FontSize="8"
+                                        Text="{Binding DownstreamTokenTable.MeasuredSource, StringFormat='Measurement Source Mode: {0}'}"
+                                        TextColor="{AppThemeBinding Light=#333333,
+                                                                    Dark=#CCCCCC}" />
+                                    <!--  Exact token usage computation  -->
+                                    <VerticalStackLayout Grid.Row="1">
+                                        <Label
+                                            FontFamily="Courier"
+                                            FontSize="8"
+                                            Text="{Binding DownstreamTokenTable.ExactInputTokens, StringFormat='Exact Input: {0:N0}'}"
+                                            TextColor="{AppThemeBinding Light=#333333,
+                                                                        Dark=#CCCCCC}" />
+                                        <Label
+                                            FontFamily="Courier"
+                                            FontSize="8"
+                                            Text="{Binding DownstreamTokenTable.ExactOutputTokens, StringFormat='Exact Output: {0:N0}'}"
+                                            TextColor="{AppThemeBinding Light=#333333,
+                                                                        Dark=#CCCCCC}" />
+                                        <Label
+                                            FontFamily="Courier"
+                                            FontSize="8"
+                                            Text="{Binding DownstreamTokenTable.ExactTotalTokens, StringFormat='Exact Total: {0:N0}'}"
+                                            TextColor="{AppThemeBinding Light=#333333,
+                                                                        Dark=#CCCCCC}" />
+                                    </VerticalStackLayout>
+                                    <!--  Estimated tokens usage computation  -->
+                                    <VerticalStackLayout Grid.Row="1" Grid.Column="1">
+                                        <Label
+                                            FontFamily="Courier"
+                                            FontSize="8"
+                                            Text="{Binding DownstreamTokenTable.EstimatedInputTokens, StringFormat='Estimated Input: {0:N0}'}"
+                                            TextColor="{AppThemeBinding Light=#333333,
+                                                                        Dark=#CCCCCC}" />
+                                        <Label
+                                            FontFamily="Courier"
+                                            FontSize="8"
+                                            Text="{Binding DownstreamTokenTable.EstimatedOutputTokens, StringFormat='Estimated Output: {0:N0}'}"
+                                            TextColor="{AppThemeBinding Light=#333333,
+                                                                        Dark=#CCCCCC}" />
+                                        <Label
+                                            FontFamily="Courier"
+                                            FontSize="8"
+                                            Text="{Binding DownstreamTokenTable.EstimatedTotalTokens, StringFormat='Estimated Total: {0:N0}'}"
+                                            TextColor="{AppThemeBinding Light=#333333,
+                                                                        Dark=#CCCCCC}" />
+                                    </VerticalStackLayout>
+                                    <!--  Measured tokens usage computation  -->
+                                    <VerticalStackLayout Grid.Row="1" Grid.Column="2">
+                                        <Label
+                                            FontFamily="Courier"
+                                            FontSize="8"
+                                            Text="{Binding DownstreamTokenTable.MeasuredInputTokens, StringFormat='Measured Input: {0:N0}'}"
+                                            TextColor="{AppThemeBinding Light=#333333,
+                                                                        Dark=#CCCCCC}" />
+                                        <Label
+                                            FontFamily="Courier"
+                                            FontSize="8"
+                                            Text="{Binding DownstreamTokenTable.MeasuredOutputTokens, StringFormat='Measured Output: {0:N0}'}"
+                                            TextColor="{AppThemeBinding Light=#333333,
+                                                                        Dark=#CCCCCC}" />
+                                        <Label
+                                            FontFamily="Courier"
+                                            FontSize="8"
+                                            Text="{Binding DownstreamTokenTable.MeasuredTotalTokens, StringFormat='Measured Total: {0:N0}'}"
+                                            TextColor="{AppThemeBinding Light=#333333,
+                                                                        Dark=#CCCCCC}" />
+                                    </VerticalStackLayout>
+                                </Grid>
+                            </VerticalStackLayout>
+
+                            <BoxView
+                                HeightRequest="1"
+                                IsVisible="{Binding DownstreamTokenTable, Converter={StaticResource InvertedBoolConverter}}"
+                                Opacity="0.3"
+                                Color="{AppThemeBinding Light=#4CAF50,
+                                                        Dark=#66BB6A}" />
+
+                            <!--  Total Token Table  -->
+                            <VerticalStackLayout Spacing="4">
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="10"
+                                    Text="📊 TOTAL"
+                                    TextColor="{AppThemeBinding Light=#1B5E20,
+                                                                Dark=#E8F5E9}" />
+                                <Grid ColumnDefinitions="*,*,*" RowDefinitions="Auto,*">
+                                    <Label
+                                        Grid.ColumnSpan="3"
+                                        FontFamily="Courier"
+                                        FontSize="8"
+                                        Text="{Binding TotalTokenTable.MeasuredSource, StringFormat='Measurement Source Mode: {0}'}"
+                                        TextColor="{AppThemeBinding Light=#333333,
+                                                                    Dark=#CCCCCC}" />
+                                    <!--  Exact token usage computation  -->
+                                    <VerticalStackLayout Grid.Row="1">
+                                        <Label
+                                            FontFamily="Courier"
+                                            FontSize="8"
+                                            Text="{Binding TotalTokenTable.ExactInputTokens, StringFormat='Exact Input: {0:N0}'}"
+                                            TextColor="{AppThemeBinding Light=#333333,
+                                                                        Dark=#CCCCCC}" />
+                                        <Label
+                                            FontFamily="Courier"
+                                            FontSize="8"
+                                            Text="{Binding TotalTokenTable.ExactOutputTokens, StringFormat='Exact Output: {0:N0}'}"
+                                            TextColor="{AppThemeBinding Light=#333333,
+                                                                        Dark=#CCCCCC}" />
+                                        <Label
+                                            FontFamily="Courier"
+                                            FontSize="8"
+                                            Text="{Binding TotalTokenTable.ExactTotalTokens, StringFormat='Exact Total: {0:N0}'}"
+                                            TextColor="{AppThemeBinding Light=#333333,
+                                                                        Dark=#CCCCCC}" />
+                                    </VerticalStackLayout>
+
+                                    <!--  Estimated tokens usage computation  -->
+                                    <VerticalStackLayout Grid.Row="1" Grid.Column="1">
+                                        <Label
+                                            FontFamily="Courier"
+                                            FontSize="8"
+                                            Text="{Binding TotalTokenTable.EstimatedInputTokens, StringFormat='Estimated Input: {0:N0}'}"
+                                            TextColor="{AppThemeBinding Light=#333333,
+                                                                        Dark=#CCCCCC}" />
+                                        <Label
+                                            FontFamily="Courier"
+                                            FontSize="8"
+                                            Text="{Binding TotalTokenTable.EstimatedOutputTokens, StringFormat='Estimated Output: {0:N0}'}"
+                                            TextColor="{AppThemeBinding Light=#333333,
+                                                                        Dark=#CCCCCC}" />
+                                        <Label
+                                            FontFamily="Courier"
+                                            FontSize="8"
+                                            Text="{Binding TotalTokenTable.EstimatedTotalTokens, StringFormat='Estimated Total: {0:N0}'}"
+                                            TextColor="{AppThemeBinding Light=#333333,
+                                                                        Dark=#CCCCCC}" />
+                                    </VerticalStackLayout>
+
+                                    <!--  Measured tokens usage computation  -->
+                                    <VerticalStackLayout Grid.Row="1" Grid.Column="2">
+                                        <Label
+                                            FontFamily="Courier"
+                                            FontSize="8"
+                                            Text="{Binding TotalTokenTable.MeasuredInputTokens, StringFormat='Measured Input: {0:N0}'}"
+                                            TextColor="{AppThemeBinding Light=#333333,
+                                                                        Dark=#CCCCCC}" />
+                                        <Label
+                                            FontFamily="Courier"
+                                            FontSize="8"
+                                            Text="{Binding TotalTokenTable.MeasuredOutputTokens, StringFormat='Measured Output: {0:N0}'}"
+                                            TextColor="{AppThemeBinding Light=#333333,
+                                                                        Dark=#CCCCCC}" />
+                                        <Label
+                                            FontFamily="Courier"
+                                            FontSize="8"
+                                            Text="{Binding TotalTokenTable.MeasuredTotalTokens, StringFormat='Measured Total: {0:N0}'}"
+                                            TextColor="{AppThemeBinding Light=#333333,
+                                                                        Dark=#CCCCCC}" />
+                                    </VerticalStackLayout>
+                                </Grid>
+                            </VerticalStackLayout>
+
+                            <!--  Legend/Explanation  -->
+                            <BoxView
+                                HeightRequest="1"
+                                Opacity="0.3"
+                                Color="{AppThemeBinding Light=#4CAF50,
+                                                        Dark=#66BB6A}" />
+
+                            <VerticalStackLayout Spacing="2">
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="9"
+                                    Text="Legend:"
+                                    TextColor="{AppThemeBinding Light=#1B5E20,
+                                                                Dark=#E8F5E9}" />
+                                <Label
+                                    FontSize="8"
+                                    LineBreakMode="WordWrap"
+                                    Text="✓ EXACT = From AI provider (highest accuracy)"
+                                    TextColor="{AppThemeBinding Light=#333333,
+                                                                Dark=#CCCCCC}" />
+                                <Label
+                                    FontSize="8"
+                                    LineBreakMode="WordWrap"
+                                    Text="📊 ESTIMATED = Calculated locally (text.Length / 4.0)"
+                                    TextColor="{AppThemeBinding Light=#333333,
+                                                                Dark=#CCCCCC}" />
+                                <Label
+                                    FontSize="8"
+                                    LineBreakMode="WordWrap"
+                                    Text="🎯 MEASURED = Best available (Exact if available, else Estimated)"
+                                    TextColor="{AppThemeBinding Light=#333333,
+                                                                Dark=#CCCCCC}" />
+                                <Label
+                                    FontSize="8"
+                                    LineBreakMode="WordWrap"
+                                    Text="— = Not available / No exact data from provider"
+                                    TextColor="{AppThemeBinding Light=#333333,
+                                                                Dark=#CCCCCC}" />
+                            </VerticalStackLayout>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!--  Agent Hops Card  -->
+
+                    <Border
+                        Padding="12"
+                        BackgroundColor="{AppThemeBinding Light=#FFF3E0,
+                                                          Dark=#E65100}"
+                        Stroke="{AppThemeBinding Light=#FF9800,
+                                                 Dark=#FFB74D}"
+                        StrokeThickness="1">
+                        <VerticalStackLayout Spacing="4">
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="14"
+                                Text="🔗 Agent Hops"
+                                TextColor="{AppThemeBinding Light=#E65100,
+                                                            Dark=#FFF3E0}" />
+                            <Label
+                                FontSize="10"
+                                LineBreakMode="WordWrap"
+                                Text="{Binding AgentHopsDetail}"
+                                TextColor="{AppThemeBinding Light=#333333,
+                                                            Dark=#CCCCCC}" />
+                        </VerticalStackLayout>
+                    </Border>
+                    <!--  Functions Called Card  -->
+
+                    <Border
+                        Padding="12"
+                        BackgroundColor="{AppThemeBinding Light=#FCE4EC,
+                                                          Dark=#880E4F}"
+                        Stroke="{AppThemeBinding Light=#E91E63,
+                                                 Dark=#F48FB1}"
+                        StrokeThickness="1">
+                        <VerticalStackLayout Spacing="4">
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="14"
+                                Text="⚙️ Functions Called"
+                                TextColor="{AppThemeBinding Light=#880E4F,
+                                                            Dark=#FCE4EC}" />
+                            <Label
+                                FontSize="10"
+                                LineBreakMode="WordWrap"
+                                Text="{Binding FunctionsCalledDetail}"
+                                TextColor="{AppThemeBinding Light=#333333,
+                                                            Dark=#CCCCCC}" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!--  Tools Called Card  -->
+
+                    <Border
+                        Padding="12"
+                        BackgroundColor="{AppThemeBinding Light=#E0F2F1,
+                                                          Dark=#004D40}"
+                        Stroke="{AppThemeBinding Light=#009688,
+                                                 Dark=#4DB6AC}"
+                        StrokeThickness="1">
+                        <VerticalStackLayout Spacing="4">
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="14"
+                                Text="🛠️ External Tools"
+                                TextColor="{AppThemeBinding Light=#004D40,
+                                                            Dark=#E0F2F1}" />
+                            <Label
+                                FontSize="10"
+                                LineBreakMode="WordWrap"
+                                Text="{Binding ToolsCalledDetail}"
+                                TextColor="{AppThemeBinding Light=#333333,
+                                                            Dark=#CCCCCC}" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!--  Topics Card  -->
+
+                    <Border
+                        Padding="12"
+                        BackgroundColor="{AppThemeBinding Light=#EDE7F6,
+                                                          Dark=#311B92}"
+                        Stroke="{AppThemeBinding Light=#673AB7,
+                                                 Dark=#9575CD}"
+                        StrokeThickness="1">
+                        <VerticalStackLayout Spacing="4">
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="14"
+                                Text="🏷️ Topics"
+                                TextColor="{AppThemeBinding Light=#311B92,
+                                                            Dark=#EDE7F6}" />
+                            <Label
+                                FontSize="10"
+                                LineBreakMode="WordWrap"
+                                Text="{Binding TopicsDetail}"
+                                TextColor="{AppThemeBinding Light=#333333,
+                                                            Dark=#CCCCCC}" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!--  Conversation History Card  -->
+
+                    <Border
+                        Padding="12"
+                        BackgroundColor="{AppThemeBinding Light=#F1F8E9,
+                                                          Dark=#33691E}"
+                        Stroke="{AppThemeBinding Light=#8BC34A,
+                                                 Dark=#AED581}"
+                        StrokeThickness="1">
+                        <VerticalStackLayout Spacing="4">
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="14"
+                                Text="📝 Conversation History"
+                                TextColor="{AppThemeBinding Light=#33691E,
+                                                            Dark=#F1F8E9}" />
+                            <Label
+                                FontSize="10"
+                                LineBreakMode="WordWrap"
+                                Text="{Binding ConversationHistoryDetail}"
+                                TextColor="{AppThemeBinding Light=#333333,
+                                                            Dark=#CCCCCC}" />
+                        </VerticalStackLayout>
+                    </Border>
+                </StackLayout>
+            </ScrollView>
+        </Grid>
+    </bottomSheet:SfBottomSheet.BottomSheetContent>
+</bottomSheet:SfBottomSheet>

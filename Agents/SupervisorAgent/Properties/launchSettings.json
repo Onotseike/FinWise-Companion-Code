@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "FinWise.SupervisorAgent": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7072",
+        "launchBrowser": false
+      }
+    }
+}
+

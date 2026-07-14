@@ -1,0 +1,71 @@
+{
+  "info": {
+    "_postman_id": "7311a605-ea4d-4d16-a268-ce794ae0d8ef",
+    "name": "Finwise",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "1293668"
+  },
+  "item": [
+    {
+      "name": "Supervisor Direct Route",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"userId\": \"u1\",\n  \"message\": \"Give me budget advice for this month\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:7072/api/supervisor/route/{{agentName}}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "7072",
+          "path": [
+            "api",
+            "supervisor",
+            "route",
+            "{{agentName}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Supervisor LLM-Routing",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"userId\": \"u1\",\n  \"message\": \"what was the breakdown of my expenses and income in the month july 2024\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:7072/api/supervisor/chat",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "7072",
+          "path": [
+            "api",
+            "supervisor",
+            "chat"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

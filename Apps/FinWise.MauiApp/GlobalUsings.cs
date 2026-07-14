@@ -1,0 +1,11 @@
+﻿global using global::Microsoft.Extensions.Logging;
+global using MauiAppType = Microsoft.Maui.Hosting.MauiApp;
+global using FinWise.MauiApp.Models;
+global using FinWise.MauiApp.Services;
+global using CommunityToolkit.Mvvm.ComponentModel;
+global using CommunityToolkit.Mvvm.Input;
+global using FinWise.MauiApp.ViewModels;
+global using FinWise.MauiApp.Views;
+global using System.Collections.ObjectModel;
+global using System.Diagnostics;
+global using System.Threading.Tasks;
